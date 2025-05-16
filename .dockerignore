@@ -1,0 +1,6 @@
+docker-compose.yaml
+Dockerfile
+.idea
+.vscode
+Jenkinsfile
+target/
