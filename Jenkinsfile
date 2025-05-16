@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REGISTRY = 'marcbassi'
-        IMAGE = 'apphelloworld'
+        IMAGE = 'appjsp'
         TAG = "${env.BUILD_ID}"
         PORT = 8011
     }
