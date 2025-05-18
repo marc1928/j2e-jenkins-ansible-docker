@@ -2,7 +2,7 @@
 - name: deploy with pipeline
   hosts: local
   become: true
-  remote_user: apx15
+  remote_user: ansadmin
 
   tasks:
       - name: remove container
