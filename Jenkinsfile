@@ -2,10 +2,11 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = 'marcbassi'
-        IMAGE = 'appjsp'
+        CT_Name = "asp-j2e"
+        REGISTRY = "marcbassi"
+        IMAGE = "appjsp"
         TAG = "${env.BUILD_ID}"
-        PORT = 8011
+        PORT = 8002
     }
 
     stages {
@@ -36,8 +37,35 @@ pipeline {
         stage('Ansible') {
             steps {
                 script {
-                   sshPublisher(publishers: [sshPublisherDesc(configName: 'Ansible', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd ansfolder;
-ansible-playbook -i hosts.yaml play.yaml;''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'ansfolder', remoteDirectorySDF: false, removePrefix: 'ansible', sourceFiles: 'play.yaml, hosts.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                    sshPublisher(
+                        publishers: [
+                            sshPublisherDesc(
+                                configName: 'Ansible',
+                                transfers: [
+                                    sshTransfer(
+                                        cleanRemote: false,
+                                        excludes: '',
+                                        execCommand: '''cd ansfolder;
+docker rm -f ${CT_Name} || true;                                     
+ansible-playbook -i hosts.yaml play.yaml -e \\
+    "container_name=${CT_Name} image_name=${REGISTRY}/${IMAGE} image_tag=${TAG} port=${PORT}";''',
+                                        execTimeout: 120000,
+                                        flatten: false,
+                                        makeEmptyDirs: false,
+                                        noDefaultExcludes: false,
+                                        patternSeparator: '[, ]+',
+                                        remoteDirectory: 'ansfolder',
+                                        remoteDirectorySDF: false,
+                                        removePrefix: 'ansible',
+                                        sourceFiles: 'play.yaml, hosts.yaml'
+                                    )
+                                ],
+                                usePromotionTimestamp: false,
+                                useWorkspaceInPromotion: false,
+                                verbose: false
+                            )
+                        ]
+                    )
                 }
             }
         }

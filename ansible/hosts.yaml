@@ -1,5 +1,5 @@
 all:
   children:
-    tomcat:
+    local:
       hosts:
-        vm.cible1:
+        vm.local:
