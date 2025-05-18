@@ -7,4 +7,4 @@ RUN mvn clean package
 
 FROM tomcat:9
 
-COPY --from=builder /app/target/*.war /usr/local/tomcat/webapps/appjsp
+COPY --form=builder /app/target/*.war /usr/local/tomcat/webapps/appjsp

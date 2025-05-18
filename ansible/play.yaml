@@ -1,0 +1,7 @@
+--- 
+- name: deploy with pipeline 
+  hosts: all 
+  become: true 
+
+  roles:
+    - role: cible1
