@@ -4,7 +4,7 @@ pipeline {
     environment {
         CT_Name = "asp-j2e"
         REGISTRY = "marcbassi"
-        IMAGE = "appjsp"
+        IMAGE = "appjsp-${env.BUILD_ID}"
         TAG = "${env.BUILD_ID}"
         PORT = 8002
     }
@@ -69,5 +69,12 @@ ansible-playbook -i hosts.yaml play.yaml -e \\
                 }
             }
         }
+        stage('Build image') {
+            steps {
+                script {
+                    echo "Accédez à l'application: http://172.16.15.13:${port}/appjsp "
+                }
+            }
+        }        
     }
 }
