@@ -46,7 +46,7 @@ pipeline {
                                         cleanRemote: false,
                                         excludes: '',
                                         execCommand: '''cd ansfolder;
-docker rm -f ${CT_Name} || true;                                     
+docker rm -f ${CT_Name} || true;
 ansible-playbook -i hosts.yaml play.yaml -e \\
     "container_name=${CT_Name} image_name=${REGISTRY}/${IMAGE} image_tag=${TAG} port=${PORT}";''',
                                         execTimeout: 120000,
@@ -69,12 +69,13 @@ ansible-playbook -i hosts.yaml play.yaml -e \\
                 }
             }
         }
-        stage('Build image') {
+
+        stage('Access Application') {
             steps {
                 script {
-                    echo "Accédez à l'application: http://172.16.15.13:${port}/appjsp "
+                    echo "Accédez à l'application: http://172.16.15.13:${PORT}/app-j2e"
                 }
             }
-        }        
+        }
     }
 }
