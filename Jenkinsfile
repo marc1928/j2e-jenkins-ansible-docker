@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'registry_docker', url: 'https://index.docker.io/v1/') {
-                        img.push("latest")
+                        img.push()
                     }
                 }
             }
@@ -36,28 +36,8 @@ pipeline {
         stage('Ansible') {
             steps {
                 script {
-                    sshPublisher(publishers: [sshPublisherDesc(
-                        configName: 'Ansible',
-                        transfers: [sshTransfer(
-                            cleanRemote: false,
-                            excludes: '',
-                            execCommand: '''cd ansible;
-ansible-playbook -i hosts.yaml play.yaml;
-''',
-                            execTimeout: 120000,
-                            flatten: false,
-                            makeEmptyDirs: false,
-                            noDefaultExcludes: false,
-                            patternSeparator: '[, ]+',
-                            remoteDirectory: '',
-                            remoteDirectorySDF: false,
-                            removePrefix: '',
-                            sourceFiles: 'ansible'
-                        )],
-                        usePromotionTimestamp: false,
-                        useWorkspaceInPromotion: false,
-                        verbose: false
-                    )])
+                   sshPublisher(publishers: [sshPublisherDesc(configName: 'Ansible', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd ansfolder;
+ansible-playbook -i hosts.yaml play.yaml;''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: 'ansfolder', remoteDirectorySDF: false, removePrefix: 'ansible', sourceFiles: 'play.yaml, hosts.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                 }
             }
         }

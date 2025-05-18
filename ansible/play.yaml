@@ -1,7 +1,27 @@
 --- 
-- name: deploy with pipeline 
-  hosts: all 
-  become: true 
+- name: deploy with pipeline
+  hosts: vm.cible1
+  become: true
+  remote_user: apx14
+  vars: 
+      container_name: j2e_c
 
-  roles:
-    - role: cible1
+  tasks:
+      - name: remove container
+        docker_container:
+             name: "{{ j2e_c }}"
+             state: absent
+        ignore_errors: yes
+
+      - name: RUN a container
+        docker_container:
+          name: "{{ j2e_c }}"
+          image: "{{ DOCKER_IMAGE_NAME} }:{{ DOCKER_IMAGE_TAG }}"
+          state: started
+          restart: yes
+          ports:
+             - "8011:2222"
+        register: result
+      - debug:
+          msg: "{{result}}"
+    
